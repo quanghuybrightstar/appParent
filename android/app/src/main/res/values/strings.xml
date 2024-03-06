@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Sunday English</string>
+    <string name="facebook_app_id">660393674829980</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">KDans6s1rZfB-u6P8tBZmP93yYdAQEfsYgciA</string>
+</resources>

@@ -1,0 +1,228 @@
+/*
+ * @Author: xuwei
+ * @Date: 2020-11-06 21:51:46
+ * @LastEditTime: 2021-02-05 16:29:13
+ * @LastEditors: xuwei
+ * @Description:
+ */
+import React, { PureComponent } from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+
+export class SingleSlide extends PureComponent {
+  static defaultProps = {
+    itemHeight: 40,
+    visibleNum: 5, // visible lins
+    activeBgColor: '#fff',
+    activeBgOpacity: 1,
+    activeFontSize: 18,
+    activeFontColor: '#F00',
+    normalBgColor: '#fff',
+    normalBgOpacity: 0.4,
+    normalFontSize: 16,
+    normalFontColor: '#333',
+    inparindex: 0,
+    textProps: {}
+  };
+
+  constructor(props) {
+    super(props);
+    this.init();
+    this.state = { checkedIndex: this._deIndex };
+  }
+
+  init = () => {
+    const { defaultIndex, itemHeight, list } = this.props;
+    if (defaultIndex) {
+      if (defaultIndex < 0 || defaultIndex > list.length - 1) {
+        console.warn(
+          '[slidepicker]defaultValueIndexes are out of range, default to 0',
+        );
+        this._deIndex = 0;
+      } else {
+        this._deIndex = defaultIndex;
+      }
+    } else {
+      this._deIndex = 0;
+    }
+    this.transValue = new Animated.Value(-this._deIndex * itemHeight || 0);
+  };
+
+  componentDidMount() {
+    const { inparindex } = this.props;
+    this.props.done(this._deIndex, inparindex);
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.list !== this.props.list) {
+      const { checkedIndex } = this.state
+      if (prevProps.list.length > this.props.list.length && checkedIndex > (this.props.list.length - 1)) {
+        const { done, inparindex, itemHeight } = this.props;
+        let rawNewIndex = this.props.list.length - 1;
+        let newIndex = Number(rawNewIndex.toFixed(0))
+        this.transValue.setValue(-newIndex * itemHeight);
+        if (newIndex !== this.state.checkedIndex && done) {
+          done(newIndex, inparindex);
+        }
+        this.setState({ checkedIndex: Math.round(newIndex) });
+      }
+    }
+  }
+
+  /** ----------------------------------- Gesture ----------------------------------------- */
+  //滑动中
+  _onPanGestureEvent = ({ nativeEvent }) => {
+    const { itemHeight } = this.props;
+    if (
+      nativeEvent.translationY > itemHeight * this.state.checkedIndex ||
+      nativeEvent.translationY <
+      -itemHeight * (this.props.list.length - this.state.checkedIndex - 1)
+    ) {
+      return;
+    }
+    this.transValue.setValue(nativeEvent.translationY);
+  };
+
+  _onHandlerStateChange = ({ nativeEvent }) => {
+    const { itemHeight } = this.props;
+    if (nativeEvent.oldState === State.BEGAN) {
+      this.transValue.setOffset(this.transValue._value);
+    } else if (nativeEvent.oldState === State.ACTIVE) {
+      const gesdy = nativeEvent.translationY;
+      const ABSDy = Math.abs(gesdy);
+      const count = Math.round(ABSDy / itemHeight);
+      this.transValue.setValue(
+        gesdy > 0 ? itemHeight * count : -itemHeight * count,
+      );
+      this.transValue.flattenOffset();
+      this.adjustAniValue();
+    }
+  };
+
+  adjustAniValue = () => {
+    const { itemHeight, list } = this.props;
+    const transvalue = this.transValue._value;
+    const count = transvalue / itemHeight;
+    if (count > 0) {
+      this.setAniAndDataback(0, 0);
+    } else if (count < -list.length + 1) {
+      this.setAniAndDataback((-list.length + 1) * itemHeight, list.length - 1);
+    } else {
+      const finalIndex = Math.abs(count);
+      this.dataBack(finalIndex);
+    }
+  };
+
+  setAniAndDataback = (position, newIndex) => {
+    this.transValue.setValue(position);
+    this.dataBack(newIndex);
+  };
+
+  dataBack = (rawNewIndex) => {
+    const { done, inparindex } = this.props;
+    let newIndex = Number(rawNewIndex.toFixed(0))
+    if (newIndex !== this.state.checkedIndex && done) {
+      done(newIndex, inparindex);
+    }
+    this.setState({ checkedIndex: Math.round(newIndex) });
+  };
+
+  resetTrans = () => {
+    this.transValue.setValue(0);
+    this.setState({ checkedIndex: 0 });
+  };
+
+  /** ----------------------------------- Render ----------------------------------------- */
+  renderItem = (item, index, offsetIndex) => {
+    const {
+      itemHeight,
+      activeFontSize,
+      activeFontColor,
+      normalFontSize,
+      normalFontColor,
+    } = this.props;
+    const { checkedIndex } = this.state;
+    const isChecked = Math.round(checkedIndex) + offsetIndex === index;
+    const itemStyle = {
+      color: isChecked ? activeFontColor : normalFontColor,
+      fontSize: isChecked ? activeFontSize : normalFontSize,
+      height: itemHeight,
+      lineHeight: itemHeight,
+    };
+    return (
+      <Text {...this.props.textProps} numberOfLines={1} style={[sts.text, itemStyle, this.props.textProps.style]} key={index} >
+        {item.name || ''}
+      </Text>
+    );
+  };
+
+  render() {
+    const {
+      list,
+      itemHeight,
+      visibleNum,
+      activeBgColor,
+      normalBgColor,
+      normalBgOpacity,
+      activeBgOpacity,
+    } = this.props;
+
+    let half = Math.floor(visibleNum / 2);
+    const fillArr = Array(half).fill('');
+    const offsetIndex = half;
+    let finalList = list.slice();
+    finalList.unshift(...fillArr);
+    finalList = finalList.concat(fillArr);
+
+    const maskBg = {
+      backgroundColor: normalBgColor,
+      opacity: normalBgOpacity,
+      width: '100%',
+      height: itemHeight * half,
+    };
+    return (
+      <View style={[sts.contain, { height: itemHeight * visibleNum }]}>
+        <PanGestureHandler
+          onGestureEvent={this._onPanGestureEvent}
+          onHandlerStateChange={this._onHandlerStateChange}>
+          <View style={{ flex: 1 }}>
+            <Animated.View
+              style={[sts.f1, { transform: [{ translateY: this.transValue }] }]}>
+              {finalList.map((item, index) =>
+                this.renderItem(item, index, offsetIndex),
+              )}
+            </Animated.View>
+            <View style={maskBg} />
+            <View
+              style={{
+                height: itemHeight,
+                width: '100%',
+                backgroundColor: activeBgColor,
+                opacity: activeBgOpacity,
+              }}
+            />
+            <View style={maskBg} />
+          </View>
+        </PanGestureHandler>
+      </View>
+    );
+  }
+}
+
+const sts = StyleSheet.create({
+  text: {
+    textAlignVertical: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  contain: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  f1: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: 10,
+    flex: 1,
+  },
+});

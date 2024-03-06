@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "906644438510",
+    "firebase_url": "https://sundayenglish-1249b.firebaseio.com",
+    "project_id": "sundayenglish-1249b",
+    "storage_bucket": "sundayenglish-1249b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906644438510:android:0f3f69986c6bf8de8022ff",
+        "android_client_info": {
+          "package_name": "gk.app.sunday"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906644438510-3orrnl5ega5qjsdv0b43iaeede5sdr7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gk.app.sunday",
+            "certificate_hash": "9773a58d735db974b9922be3f6482f92cbcdbef0"
+          }
+        },
+        {
+          "client_id": "906644438510-pdgunq9ljth1va3to7jaa2ne9o008hq0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gk.app.sunday",
+            "certificate_hash": "a7d56d348f0c7e16356331b4b68ef501ebdc68f3"
+          }
+        },
+        {
+          "client_id": "906644438510-kipbckco3kd26a5o3r2dc0mso1psh1rv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3gdSK62uZaFQLYTXvCfMBKAv53moN_8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906644438510-1gc259525vacoqa2979hdmvv0ovqe0bm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906644438510-ahmeiq4jsb47h9741oivibki7rrgm802.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "gk.app.sunday"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

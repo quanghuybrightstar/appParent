@@ -1,0 +1,31 @@
+const images = {
+    LOGO: require('./new_image/logo.png'),
+    LOGO_WHITE: require('./new_image/logo_white.png'),
+    BACKGROUND_SPLASH: require('./new_image/background_splash.png'),
+    PATH_LOGIN: require('./new_image/path_login.png'),
+    CITY_BACKGROUND1: require('./new_image/city_background1.png'),
+    CITY_BACKGROUND2: require('./new_image/city_background2.png'),
+    ICON_EMAIL: require('./new_image/icon_email.png'),
+    ICON_LOCK: require('./new_image/icon_lock.png'),
+    ICON_HIDE_PASS: require('./new_image/hide_pass.png'),
+    ICON_SHOW_PASS: require('./new_image/show_pass.png'),
+    ICON_FACEBOOK: require('./new_image/icon_facebook.png'),
+    ICON_GOOGLE: require('./new_image/icon_google.png'),
+    ICON_APPLE: require('./new_image/icon_apple.png'),
+    ROLE_STUDENT: require('./new_image/student_role.png'),
+    ROLE_TEACHER: require('./new_image/teacher_role.png'),
+    ROLE_PARENT: require('./new_image/parent_role.png'),
+    ICON_ACCOUNT: require('./new_image/icon_account.png'),
+    ICON_BIRTHDAY: require('./new_image/icon_birthday.png'),
+    ICON_PHONE: require('./new_image/icon_phone.png'),
+    ICON_LOCATION: require('./new_image/icon_location.png'),
+    ICON_SCHOOL: require('./new_image/icon_school.png'),
+    BTN_RADIO: require('./new_image/btn_radio.png'),
+    BTN_RADIO_CHECKED: require('./new_image/btn_radio_checked.png'),
+    ICON_CLOSE: require('./new_image/icon_close.png'),
+    ICON_DROPDOWN_ARROW: require('./new_image/icon_dropdown_arrow.png'),
+    EMAIL_LOCK: require('./new_image/email_lock.png'),
+    BG_DEFAUT: require('./image/imagebackground.png')
+};
+
+export default images;
